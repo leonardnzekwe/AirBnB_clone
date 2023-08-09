@@ -92,6 +92,28 @@ class TestFileStorage(unittest.TestCase):
         self.file_storage.new(base_model2)
         self.assertIn(key, self.file_storage.all())
 
+    def test_documentations(self):
+        """
+        Documentation Test:
+        Test if there is a doc in module, class and methods.
+        """
+        from models.engine import file_storage
+
+        self.assertIsNotNone(file_storage.__doc__)
+        self.assertGreater(len(file_storage.__doc__), 5)
+
+        self.assertIsNotNone(FileStorage.all.__doc__)
+        self.assertGreater(len(FileStorage.all.__doc__), 5)
+
+        self.assertIsNotNone(FileStorage.new.__doc__)
+        self.assertGreater(len(FileStorage.new.__doc__), 5)
+
+        self.assertIsNotNone(FileStorage.save.__doc__)
+        self.assertGreater(len(FileStorage.save.__doc__), 5)
+
+        self.assertIsNotNone(FileStorage.reload.__doc__)
+        self.assertGreater(len(FileStorage.reload.__doc__), 5)
+
 
 if __name__ == "__main__":
     unittest.main()

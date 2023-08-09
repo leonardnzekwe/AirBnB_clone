@@ -18,12 +18,12 @@ class TestBaseModel(unittest.TestCase):
     BaseModel Test class
     """
     @classmethod
-    def setUp(self):
+    def setUp(cls):
         """
         setUp() instance method:
         Create a new instance of FileStorage before each test
         """
-        self.file_storage = FileStorage()
+        cls.file_storage = FileStorage()
 
     @classmethod
     def tearDownClass(cls):
