@@ -7,6 +7,12 @@ that contains the entry point of the command interpreter:
 
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 import cmd
 
 
@@ -16,7 +22,6 @@ class HBNBCommand(cmd.Cmd):
     the entry point of the command interpreter:
     """
     prompt = "(hbnb) "
-    class_list = ["BaseModel"]
 
     def do_quit(self, arg):
         """Quit command to exit the program\n"""
@@ -28,52 +33,57 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def emptyline(self):
-        """Do nothing when an empty line is entered"""
+        """Do nothing when an empty line is entered\n"""
         pass
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel"""
+        """Creates a new instance of BaseModel\n"""
         if not arg:
             print("** class name missing **")
             return
-        try:
-            obj = eval(arg)()
-            obj.save()
-            print(obj.id)
-        except Exception:
+        class_name = arg.split()[0]
+        if class_name not in storage.classes_dict:
             print("** class doesn't exist **")
+            return
+        new_instance = storage.classes_dict[class_name]()
+        storage.save()
+        print(new_instance.id)
 
     def do_show(self, arg):
-        """Prints the string representation of an instance"""
-        args = arg.split()
-        if len(args) == 0:
+        """Prints the string representation of an instance\n"""
+        if not arg:
             print("** class name missing **")
             return
-        if args[0] not in HBNBCommand.class_list:
+        args_list = arg.split()
+        class_name = args_list[0]
+        if class_name not in storage.classes_dict:
             print("** class doesn't exist **")
             return
-        if len(args) < 2:
+        if len(args_list) < 2:
             print("** instance id missing **")
             return
-        key = f"{args[0]}.{args[1]}"
+        instance_id = args_list[1]
+        key = f"{class_name}.{instance_id}"
         if key in storage.all():
             print(storage.all()[key])
         else:
             print("** no instance found **")
 
     def do_destroy(self, arg):
-        """Deletes an instance based on class name and id"""
-        args = arg.split()
-        if len(args) == 0:
+        """Deletes an instance based on class name and id\n"""
+        if not arg:
             print("** class name missing **")
             return
-        if args[0] not in HBNBCommand.class_list:
+        args_list = arg.split()
+        class_name = args_list[0]
+        if class_name not in storage.classes_dict:
             print("** class doesn't exist **")
             return
-        if len(args) < 2:
+        if len(args_list) < 2:
             print("** instance id missing **")
             return
-        key = f"{args[0]}.{args[1]}"
+        instance_id = args_list[1]
+        key = f"{class_name}.{instance_id}"
         if key in storage.all():
             del storage.all()[key]
             storage.save()
@@ -81,56 +91,58 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_all(self, arg):
-        """Prints all string representation of instances based on class name"""
-        args = arg.split()
-        obj_list = []
-        if len(args) == 0:
+        """Prints all string repr of instances based on class name\n"""
+        instance_list = []
+        if not arg:
             for key, value in storage.all().items():
-                obj_list.append(str(value))
-            print(obj_list)
-        elif args[0] in HBNBCommand.class_list:
+                instance_list.append(str(value))
+            print(instance_list)
+            return
+        class_name = arg.split()[0]
+        if class_name in storage.classes_dict:
             for key, value in storage.all().items():
-                if args[0] in key:
-                    obj_list.append(str(value))
-            print(obj_list)
+                if class_name in key:
+                    instance_list.append(str(value))
+            print(instance_list)
         else:
             print("** class doesn't exist **")
-            return
 
     def do_update(self, arg):
-        """Updates an instance based on class name and id"""
-        args = arg.split()
-        if len(args) == 0:
+        """Updates an instance based on class name and id\n"""
+        if not arg:
             print("** class name missing **")
             return
-        if args[0] not in HBNBCommand.class_list:
+        args_list = arg.split()
+        class_name = args_list[0]
+        if class_name not in storage.classes_dict:
             print("** class doesn't exist **")
             return
-        if len(args) < 2:
+        if len(args_list) < 2:
             print("** instance id missing **")
             return
-        key = f"{args[0]}.{args[1]}"
+        instance_id = args_list[1]
+        key = f"{class_name}.{instance_id}"
         if key not in storage.all():
             print("** no instance found **")
             return
-        if len(args) < 3:
+        if len(args_list) < 3:
             print("** attribute name missing **")
             return
-        if len(args) < 4:
+        attr_name = args_list[2]
+        if len(args_list) < 4:
             print("** value missing **")
             return
-        obj = storage.all()[key]
-        attr_name = args[2]
-        attr_value = args[3].strip('"')
+        attr_value = args_list[3].strip('"')
         attr_type = None
-        if hasattr(obj, attr_name):
-            attr_type = type(getattr(obj, attr_name))
+        instance = storage.all()[key]
+        if hasattr(instance, attr_name):
+            attr_type = type(getattr(instance, attr_name))
         if attr_type:
-            converted_value = attr_type(attr_value)
+            casted_value = attr_type(attr_value)
         else:
-            converted_value = attr_value
-        setattr(obj, attr_name, converted_value)
-        obj.save()
+            casted_value = attr_value
+        setattr(instance, attr_name, casted_value)
+        instance.save()
 
 
 if __name__ == '__main__':

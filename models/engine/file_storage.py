@@ -7,6 +7,13 @@ and deserializes JSON file to instances
 
 
 import json
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 from os.path import exists
 
 
@@ -19,6 +26,11 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
+    classes_dict = {
+        "BaseModel": BaseModel, "User": User, "State": State,
+        "City": City, "Amenity": Amenity, "Place": Place,
+        "Review": Review
+    }
 
     def all(self):
         """
@@ -55,10 +67,10 @@ class FileStorage:
         no exception should be raised)
         """
         if exists(self.__file_path):
-            from models.base_model import BaseModel
-
             with open(self.__file_path, "r") as file:
                 data = json.load(file)
-            self.__objects = {}
-            for key, obj_dict in data.items():
-                self.__objects[key] = BaseModel(**obj_dict)
+                for key, obj_dict in data.items():
+                    class_name = obj_dict["__class__"]
+                    if class_name in FileStorage.classes_dict:
+                        cls = FileStorage.classes_dict[class_name]
+                        self.__objects[key] = cls(**obj_dict)

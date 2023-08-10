@@ -249,6 +249,9 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsNotNone(base_model.__doc__)
         self.assertGreater(len(base_model.__doc__), 5)
 
+        self.assertIsNotNone(BaseModel.__doc__)
+        self.assertGreater(len(BaseModel.__doc__), 5)
+
         self.assertIsNotNone(BaseModel.__init__.__doc__)
         self.assertGreater(len(BaseModel.__init__.__doc__), 5)
 

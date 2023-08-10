@@ -6,7 +6,6 @@ A class that defines all common attributes/methods for other classes
 
 
 from datetime import datetime
-from models import storage
 from uuid import uuid4
 
 
@@ -29,6 +28,7 @@ class BaseModel:
                 if key != "__class__":
                     setattr(self, key, value)
         else:
+            from models import storage
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
@@ -48,6 +48,7 @@ class BaseModel:
         with the current datetime
         also calls save(self) method of storage
         """
+        from models import storage
         self.updated_at = datetime.now()
         storage.save()
 

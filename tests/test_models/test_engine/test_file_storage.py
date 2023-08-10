@@ -4,8 +4,14 @@ FileStorage Test Module
 """
 
 
-from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 import os
 import unittest
 
@@ -92,6 +98,26 @@ class TestFileStorage(unittest.TestCase):
         self.file_storage.new(base_model2)
         self.assertIn(key, self.file_storage.all())
 
+    def test_attr(self):
+        """
+        Test FileStorage class attributes
+        """
+        store = FileStorage()
+        self.assertTrue(store, "classes")
+        self.assertTrue(store, "_FileStorage__file_path")
+        self.assertTrue(store, "_FileStorage__objects")
+
+    def test_classes_attribute(self):
+        """
+        Test FileStorage classes attribute dict values
+        """
+        expected_classes = {
+            "BaseModel": BaseModel, "User": User, "State": State,
+            "City": City, "Amenity": Amenity, "Place": Place,
+            "Review": Review
+        }
+        self.assertDictEqual(FileStorage.classes_dict, expected_classes)
+
     def test_documentations(self):
         """
         Documentation Test:
@@ -101,6 +127,9 @@ class TestFileStorage(unittest.TestCase):
 
         self.assertIsNotNone(file_storage.__doc__)
         self.assertGreater(len(file_storage.__doc__), 5)
+
+        self.assertIsNotNone(FileStorage.__doc__)
+        self.assertGreater(len(FileStorage.__doc__), 5)
 
         self.assertIsNotNone(FileStorage.all.__doc__)
         self.assertGreater(len(FileStorage.all.__doc__), 5)
