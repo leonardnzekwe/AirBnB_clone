@@ -19,7 +19,7 @@ class TestAmenity(unittest.TestCase):
     a class that tests the Amenity() class
     """
     @classmethod
-    def setUp(cls):
+    def setUpClass(cls):
         """
         setUp() instance method:
         Create a new instance of FileStorage before each test
