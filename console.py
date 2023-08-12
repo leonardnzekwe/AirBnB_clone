@@ -192,9 +192,12 @@ class HBNBCommand(cmd.Cmd):
                 if args.startswith("{") and args.endswith("}"):
                     try:
                         args_dict = json.loads(args)
-                        for key, value in args_dict.items():
-                            arguments = f"{instance_id} {key} {value}"
-                            self.onecmd(f"{command} {class_name} {arguments}")
+                        if args_dict:
+                            for key, value in args_dict.items():
+                                arguments = (
+                                    f"{class_name} {instance_id} {key} {value}"
+                                )
+                                self.do_update(arguments)
                         return ""
                     except Exception:
                         return line
