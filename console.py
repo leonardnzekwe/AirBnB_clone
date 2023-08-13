@@ -172,35 +172,21 @@ class HBNBCommand(cmd.Cmd):
         command = arg_parts.group(2)
         instance_id = arg_parts.group(4)
         args = arg_parts.group(5)
+        attr_name = None
+        attr_value = None
 
         if command is None:
             return line
-        if command in ["all", "count"]:
-            if class_name:
-                return f"{command} {class_name}"
-            return f"{command}"
-        if command in ["show", "destroy"]:
-            if class_name and instance_id:
-                return f"{command} {class_name} {instance_id}"
-            if class_name:
-                return f"{command} {class_name}"
-            return f"{command}"
+        if command in ["all", "count", "show", "destroy"]:
+            return self.process_args(
+                command, class_name, instance_id, attr_name, attr_value
+            )
         if command == "update":
-            attr_name = None
-            attr_value = None
             if args:
-                if args.startswith("{") and args.endswith("}"):
-                    try:
-                        args_dict = json.loads(args)
-                        if args_dict:
-                            for key, value in args_dict.items():
-                                arguments = (
-                                    f"{class_name} {instance_id} {key} {value}"
-                                )
-                                self.do_update(arguments)
-                        return ""
-                    except Exception:
-                        return line
+                if args.startswith("{"):
+                    return self.process_dict(
+                        line, args, class_name, instance_id
+                    )
                 else:
                     args_list = args.split(", ")
                     attr_name = args_list[0]
@@ -226,6 +212,24 @@ class HBNBCommand(cmd.Cmd):
         if class_name:
             return f"{command} {class_name}"
         return f"{command}"
+
+    def process_dict(self, line, args, class_name, instance_id):
+        """A function that handles case when args is a dictionary"""
+        try:
+            start_index = args.find('{')
+            end_index = args.find('}', start_index) + 1
+            dict_string = args[start_index:end_index]
+
+            args_dict = json.loads(dict_string)
+            if args_dict:
+                for key, value in args_dict.items():
+                    arguments = (
+                        f"{class_name} {instance_id} {key} {value}"
+                    )
+                    self.do_update(arguments)
+            return ""
+        except Exception:
+            return line
 
 
 if __name__ == '__main__':

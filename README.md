@@ -30,7 +30,36 @@ Interactively:  `./console.py`
 Non-interactively: `<input cmd> | ./console.py`
 
 ### 1.4: Usage: 
-Execute `help` for list of commands to display
+Execute `help` to display a list of available commands. Also execute `help <command>` to show the purpose of the command.
+
+**Classes:** `BaseModel`, `User`, `State`, `City`, `Amenity`, `Place`, `Review`
+
+**Commands Usage:**
+- `EOF` - `CTRL + D`
+- `quit` - `quit`
+- `create` - `create <class_name>`
+- `help`:
+    - `help`
+    - `help <command>`
+- `all`:
+    - `all`
+    - `all <class_name>`
+    - `<class_name>.all()`
+- `count`:
+    - `count`
+    - `count <class_name>`
+    - `<class_name>.count()`
+- `destroy`:
+    - `destroy <class_name> <instance_id>`
+    - `<class name>.destroy(<id>)`
+- `show`:
+    - `show <class_name> <instance_id>`
+    - `<class name>.show(<id>)`
+- `update`:
+    - `update <class name> <id> <attribute name> "<attribute value>"`
+    - `<class name>.update(<id>, <attribute name>, <attribute value>)`
+    - `<class name>.update(<id>, <dictionary representation>)`
+
 
 ### 1.5: Examples:
 Interactive mode:
@@ -40,7 +69,7 @@ $ ./console.py
 
 Documented commands (type help <topic>):
 ========================================
-EOF  help  quit
+EOF  all  count  create  destroy  help  quit  show  update
 
 (hbnb) 
 (hbnb) 
