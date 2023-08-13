@@ -6,7 +6,8 @@ that contains the entry point of the command interpreter:
 
 
 import cmd
-import json
+import re
+import shlex
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -15,7 +16,6 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-import re
 
 
 class HBNBCommand(cmd.Cmd):
@@ -183,12 +183,14 @@ class HBNBCommand(cmd.Cmd):
             )
         if command == "update":
             if args:
-                if args.startswith("{"):
+                args_list = shlex.split(args)
+                for i in range(len(args_list)):
+                    args_list[i] = args_list[i].strip("{},:")
+                if len(args_list) > 2:
                     return self.process_dict(
-                        line, args, class_name, instance_id
+                        args_list, class_name, instance_id
                     )
                 else:
-                    args_list = args.split(", ")
                     attr_name = args_list[0]
                     if len(args_list) >= 2:
                         attr_value = args_list[1]
@@ -213,23 +215,16 @@ class HBNBCommand(cmd.Cmd):
             return f"{command} {class_name}"
         return f"{command}"
 
-    def process_dict(self, line, args, class_name, instance_id):
+    def process_dict(self, args_list, class_name, instance_id):
         """A function that handles case when args is a dictionary"""
-        try:
-            start_index = args.find('{')
-            end_index = args.find('}', start_index) + 1
-            dict_string = args[start_index:end_index]
-
-            args_dict = json.loads(dict_string)
-            if args_dict:
-                for key, value in args_dict.items():
-                    arguments = (
-                        f"{class_name} {instance_id} {key} {value}"
-                    )
-                    self.do_update(arguments)
-            return ""
-        except Exception:
-            return line
+        for i in range(1, len(args_list), 2):
+            attr_name = args_list[i - 1]
+            attr_value = args_list[i]
+            arguments = (
+                f"{class_name} {instance_id} {attr_name} {attr_value}"
+            )
+            self.do_update(arguments)
+        return ""
 
 
 if __name__ == '__main__':
