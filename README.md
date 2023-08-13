@@ -24,10 +24,16 @@ The console will be a tool to validate this storage engine
 
 ![The Console](images/console.png)
 
-### 1.3: Startup:
-Interactively:  `./console.py`
+### 1.3: Getting Started:
+To start the AirBnB clone's console, use the following guide:
 
-Non-interactively: `<input cmd> | ./console.py`
+- Clone the project repository: `git clone https://github.com/leonardnzekwe/AirBnB_clone`
+
+- Navigate to the project directory: `cd AirBnB_clone`
+
+- Launch the console:
+    - Interactively:  `./console.py`
+    - Non-interactively: `<input cmd> | ./console.py`
 
 ### 1.4: Usage: 
 Execute `help` to display a list of available commands. Also execute `help <command>` to show the purpose of the command.

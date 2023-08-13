@@ -39,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel\n"""
+        """Creates a new instance of a class\n"""
         if not arg:
             print("** class name missing **")
             return
@@ -171,60 +171,38 @@ class HBNBCommand(cmd.Cmd):
         class_name = arg_parts.group(1)
         command = arg_parts.group(2)
         instance_id = arg_parts.group(4)
-        args = arg_parts.group(5)
-        attr_name = None
-        attr_value = None
+        args_str = arg_parts.group(5)
+        args_arr = self.process_args(command, class_name, instance_id)
+        pre_args = ' '.join(args_arr)
 
         if command is None:
             return line
         if command in ["all", "count", "show", "destroy"]:
-            return self.process_args(
-                command, class_name, instance_id, attr_name, attr_value
-            )
+            return pre_args
         if command == "update":
-            if args:
-                args_list = shlex.split(args)
-                for i in range(len(args_list)):
-                    args_list[i] = args_list[i].strip("{},:")
-                if len(args_list) > 2:
-                    return self.process_dict(
-                        args_list, class_name, instance_id
-                    )
-                else:
-                    attr_name = args_list[0]
-                    if len(args_list) >= 2:
-                        attr_value = args_list[1]
-            return self.process_args(
-                command, class_name, instance_id, attr_name, attr_value
-            )
+            if not args_str:
+                return pre_args
+            kwargs = shlex.split(args_str)
+            for i in range(len(kwargs)):
+                kwargs[i] = kwargs[i].strip("{},:")
+            if len(kwargs) == 1:
+                return f"{pre_args} {kwargs[0]}"
+            else:
+                for i in range(1, len(kwargs), 2):
+                    self.onecmd(f"{pre_args} {kwargs[i - 1]} {kwargs[i]}")
+                return ""
         return line
 
-    def process_args(
-            self, command, class_name, instance_id, attr_name, attr_value
-    ):
+    def process_args(self, command, class_name, instance_id):
         """A function that handles error management for precmd update()"""
-        if class_name and instance_id and attr_name and attr_value:
-            arguments = f"{instance_id} {attr_name} {attr_value}"
-            return f"{command} {class_name} {arguments}"
-        if class_name and instance_id and attr_name:
-            arguments = f"{instance_id} {attr_name}"
-            return f"{command} {class_name} {arguments}"
-        if class_name and instance_id:
-            return f"{command} {class_name} {instance_id}"
+        args_list = []
+        if command:
+            args_list.append(command)
         if class_name:
-            return f"{command} {class_name}"
-        return f"{command}"
-
-    def process_dict(self, args_list, class_name, instance_id):
-        """A function that handles case when args is a dictionary"""
-        for i in range(1, len(args_list), 2):
-            attr_name = args_list[i - 1]
-            attr_value = args_list[i]
-            arguments = (
-                f"{class_name} {instance_id} {attr_name} {attr_value}"
-            )
-            self.do_update(arguments)
-        return ""
+            args_list.append(class_name)
+        if instance_id:
+            args_list.append(instance_id)
+        return args_list
 
 
 if __name__ == '__main__':
