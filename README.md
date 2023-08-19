@@ -108,12 +108,12 @@ EOF  help  quit
 $
 ```
 
-## 3.0: Web static
-### 3.1: Features
+## 2.0: Web static
+### 2.1: Features
 - Static User Interface of the application
 - Static templates of each object
 
-### 3.2: Technologies:
+### 2.2: Technologies:
 - HTML
 - CSS
 
