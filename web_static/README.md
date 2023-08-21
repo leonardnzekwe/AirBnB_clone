@@ -13,12 +13,10 @@ Having implemented a command interpreter for managing the AirBnB objects, it’s
 ![Web static](../images/web_static.png)
 
 ## Zoomed View:
-![Alt text](images/zoomed_view.png)
+![Zoomed View](images/zoomed_view.png)
 
 ## Desktop View:
-![Alt text](images/desktop_view.png)
+![Desktop View](images/desktop_view.png)
 
 ## Mobile View:
-<div style="display: flex; justify-content: center;">
-    <img src="images/mobile_view.png">
-</div>
+![Mobile View](images/mobile_view.png)

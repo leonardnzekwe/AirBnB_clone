@@ -120,15 +120,13 @@ $
 ![Web static](images/web_static.png)
 
 ### 2.3: Zoomed View:
-![Alt text](web_static/images/zoomed_view.png)
+![Zoomed View](web_static/images/zoomed_view.png)
 
 ### 2.4: Desktop View:
-![Alt text](web_static/images/desktop_view.png)
+![Desktop View](web_static/images/desktop_view.png)
 
 ### 2.5: Mobile View:
-<div style="display: flex; justify-content: center;">
-    <img src="web_static/images/mobile_view.png">
-</div>
+![Mobile View](web_static/images/mobile_view.png)
 
 ## 3.0: Data Model
 ![Data Model](images/data_model.png)
