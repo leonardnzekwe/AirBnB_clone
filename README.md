@@ -1,5 +1,5 @@
 # AirBnB Clone
-ALX SWE AirBnB Clone Project
+AirBnB Clone Project
 
 ![AirBnB Clone](images/hbnb.png)
 
