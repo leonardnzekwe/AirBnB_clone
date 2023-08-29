@@ -1,6 +1,8 @@
 # AirBnB Clone
 
-A Clone Implementation of AirBnB Website
+A Clone Implementation of AirBnB Website.
+
+An ALX SWE Project.
 
 ![AirBnB Clone](images/hbnb.png)
 
