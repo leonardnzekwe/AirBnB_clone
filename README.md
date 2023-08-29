@@ -1,5 +1,6 @@
 # AirBnB Clone
-AirBnB Clone Project
+
+Clone Implementation of AirBnB Website
 
 ![AirBnB Clone](images/hbnb.png)
 
